@@ -1,0 +1,12 @@
+  name: "Generate Credentials"
+  description: "Generate credentials for a user"
+  author: "qtchaos"
+
+  inputs:
+      GITHUB_TOKEN:
+          description: "Github token"
+          required: true
+
+  runs:
+      using: "node12"
+      main: "dist/index.js"
