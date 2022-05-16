@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" rel="stylesheet">
     <style>
         html, body {
             height: 75%
@@ -10,35 +10,37 @@
     <meta charset="UTF-8">
     <title>Home</title>
 </head>
-<body >
+<body>
 <main class="m-5">
-<h1 id="title">mega-web</h1>
-<div style="position: absolute; left: -2000px;">
-    <label for="search">Search:</label>
-    <input id="search" type="text" name="name" oninput="location.reload()" value="" />
-</div>
-<article>
-    <form id="secretForm" onsubmit="generate_details()" class="w-25">
+    <h1 id="title">mega-web</h1>
+    <div style="position: absolute; left: -2000px;">
+        <label for="search">Search:</label>
+        <input id="search" name="name" oninput="location.reload()" type="text" value=""/>
+    </div>
+    <form class="w-25" id="secretForm" onsubmit="generate_details()">
         <div class="mb-3">
-            <label for="secret" class="form-label">Spam your keyboard inside this box.</label>
-            <input name="secret" type="text" class="form-control" id="secret" aria-describedby="secretHelp" minlength="24" autofocus pattern="[a-zA-Z'-'\s]*" maxlength="24">
-            <div id="secretHelp" class="form-text">Note: if the input contains any non-alphabetical characters, it will be denied.</div>
+            <label class="form-label" for="secret">Spam your keyboard inside this box.</label>
+            <input aria-describedby="secretHelp" autofocus class="form-control" id="secret" maxlength="24" minlength="24" name="secret" onkeydown="return event.keyCode != 13;" pattern="[a-zA-Z'-'\s]*" type="text">
+            <div class="form-text" id="secretHelp">Note: if the input contains any non-alphabetical characters, it will
+                be denied.
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button class="btn btn-primary" type="submit">Submit</button>
     </form>
-    <p id="afterSubmit" class="visually-hidden"></p>
-    <button id="reload" onclick="location.reload()" class="btn btn-primary visually-hidden">Generate new account</button>
-</article>
-
+    <p class="visually-hidden" id="afterSubmit"></p>
+    <button class="btn btn-primary visually-hidden" id="reload" onclick="location.reload()">Generate new account
+    </button>
 </main>
 
 <script>
-  form = document.getElementById("secretForm");
-
   let form = document.getElementById('secretForm');
   let tile = document.getElementById('title');
   let afterSubmit = document.getElementById('afterSubmit');
-  function handleForm(event) { event.preventDefault(); }
+
+  function handleForm(event) {
+    event.preventDefault();
+  }
+
   form.addEventListener('submit', handleForm);
 
   function generate_details() {
@@ -53,13 +55,16 @@
 
   async function generateJSON(url, secret) {
     return fetch(url + "generate/" + secret)
-      .then((response)=>response.json())
-      .then(()=>{ getJSON(url, secret) } )
+      .then((response) => response.json())
+      .then(() => {
+        getJSON(url, secret)
+      })
   }
+
   async function getJSON(url, secret) {
     fetch(url + secret)
-      .then((response)=>response.json())
-      .then((responseJson)=>{
+      .then((response) => response.json())
+      .then((responseJson) => {
         let button = document.getElementById("reload");
         document.getElementById("afterSubmit").innerHTML = "<span class='fw-bold'>Credentials loaded.</span>";
         document.getElementById("afterSubmit").innerHTML += "<br>Email: " + responseJson.email;
