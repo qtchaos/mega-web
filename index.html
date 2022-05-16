@@ -33,30 +33,6 @@
 </main>
 
 <script>
-  if (window.addEventListener) {
-    window.addEventListener("load", generateForm(), false); // IE9, Chrome, FireFox
-  }
-  function generateForm() {
-    form = document.getElementById("secretForm");
-
-    label = document.createElement("label");
-    label.setAttribute("for", "secret");
-    label.innerHTML = "Spam your keyboard inside this box.";
-
-    var input = document.createElement("input");
-    input.type = "text";
-    input.name = "secret";
-    input.id = "secret";
-    input.className = "form-control";
-    input.minlength = "24";
-    input.autofocus = "autofocus";
-    input.pattern = "[a-zA-Z'-'\s]*";
-    input.maxlength = "24";
-
-    form.appendChild(label);
-    form.appendChild(input);
-
-  }
   form = document.getElementById("secretForm");
 
   let form = document.getElementById('secretForm');
