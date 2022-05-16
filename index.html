@@ -1,15 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <style>
+        html, body {
+            height: 75%
+        }
+    </style>
     <meta charset="UTF-8">
     <title>Home</title>
 </head>
-<body>
-<h3 id="demo" onclick="myFunction()">Click me to change my color.</h3>
+<body >
+<main class="m-5">
+<h1 id="title">mega-web</h1>
+<div style="position: absolute; left: -2000px;">
+    <label for="search">Search:</label>
+    <input id="search" type="text" name="name" oninput="location.reload()" value="" />
+</div>
+<article>
+    <form id="secretForm" onsubmit="generate_details()" class="w-25">
+        <div class="mb-3">
+            <label for="secret" class="form-label">Spam your keyboard inside this box.</label>
+            <input name="secret" type="text" class="form-control" id="secret" aria-describedby="secretHelp" minlength="24" autofocus pattern="[a-zA-Z'-'\s]*" maxlength="24">
+            <div id="secretHelp" class="form-text">Note: if the input contains any non-alphabetical characters, it will be denied.</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <p id="afterSubmit" class="visually-hidden"></p>
+    <button id="reload" onclick="location.reload()" class="btn btn-primary visually-hidden">Generate new account</button>
+</article>
+
+</main>
 
 <script>
-  function myFunction() {
-    document.getElementById("demo").style.color = "red";
+  if (window.addEventListener) {
+    window.addEventListener("load", generateForm(), false); // IE9, Chrome, FireFox
+  }
+  function generateForm() {
+    form = document.getElementById("secretForm");
+
+    label = document.createElement("label");
+    label.setAttribute("for", "secret");
+    label.innerHTML = "Spam your keyboard inside this box.";
+
+    var input = document.createElement("input");
+    input.type = "text";
+    input.name = "secret";
+    input.id = "secret";
+    input.className = "form-control";
+    input.minlength = "24";
+    input.autofocus = "autofocus";
+    input.pattern = "[a-zA-Z'-'\s]*";
+    input.maxlength = "24";
+
+    form.appendChild(label);
+    form.appendChild(input);
+
+  }
+  form = document.getElementById("secretForm");
+
+  let form = document.getElementById('secretForm');
+  let tile = document.getElementById('title');
+  let afterSubmit = document.getElementById('afterSubmit');
+  function handleForm(event) { event.preventDefault(); }
+  form.addEventListener('submit', handleForm);
+
+  function generate_details() {
+    afterSubmit.classList.remove('visually-hidden');
+    form.classList.add("visually-hidden");
+    tile.classList.add("visually-hidden");
+
+    var nameValue = document.getElementById("secret").value;
+    generateJSON('http://127.0.0.1:8000/', nameValue)
+    document.getElementById("afterSubmit").innerHTML = "Submitted request... ";
+  }
+
+  async function generateJSON(url, secret) {
+    return fetch(url + "generate/" + secret)
+      .then((response)=>response.json())
+      .then(()=>{ getJSON(url, secret) } )
+  }
+  async function getJSON(url, secret) {
+    fetch(url + secret)
+      .then((response)=>response.json())
+      .then((responseJson)=>{
+        let button = document.getElementById("reload");
+        document.getElementById("afterSubmit").innerHTML = "<span class='fw-bold'>Credentials loaded.</span>";
+        document.getElementById("afterSubmit").innerHTML += "<br>Email: " + responseJson.email;
+        document.getElementById("afterSubmit").innerHTML += "<br>Password: " + responseJson.password;
+        button.classList.remove("visually-hidden");
+      })
   }
 </script>
 </body>
