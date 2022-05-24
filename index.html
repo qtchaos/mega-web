@@ -67,9 +67,10 @@
       .then((response) => response.json())
       .then((responseJson) => {
         let button = document.getElementById("reload");
+        console.log(responseJson);
         document.getElementById("afterSubmit").innerHTML = "<span class='fw-bold'>Credentials loaded.</span>";
-        document.getElementById("afterSubmit").innerHTML += "<br>Email: " + responseJson.email;
-        document.getElementById("afterSubmit").innerHTML += "<br>Password: " + responseJson.password;
+        document.getElementById("afterSubmit").innerHTML += "<br>Email: " + responseJson[0]
+        document.getElementById("afterSubmit").innerHTML += "<br>Password: " + responseJson[1];
         button.classList.remove("visually-hidden");
       })
   }
